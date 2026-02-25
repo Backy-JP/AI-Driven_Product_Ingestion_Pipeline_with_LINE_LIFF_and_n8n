@@ -1,5 +1,11 @@
 # AI-Driven Product Ingestion Pipeline
 
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/Backy-JP/AI-Driven_Product_Ingestion_Pipeline_with_LINE_LIFF_and_n8n)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?logo=supabase&logoColor=white)](https://supabase.com)
+[![n8n](https://img.shields.io/badge/n8n-EA4B71?logo=n8n&logoColor=white)](https://n8n.io)
+[![LINE](https://img.shields.io/badge/LINE-00C300?logo=line&logoColor=white)](https://line.me)
+
 > 🎯 **專為代購者設計的高效 AI 商品管理系統**  
 > 基於 **LINE LIFF** + **n8n** + **Supabase**  
 > **拍照即上傳，AI 自動辨識吊牌，秒級建檔推送商品卡片**
@@ -12,9 +18,12 @@
 - [系統展示](#系統展示)
 - [技術架構](#技術架構)
 - [安裝與部署](#安裝與部署)
+- [環境變數設定](#環境變數設定)
 - [使用說明](#使用說明)
 - [常見問題](#常見問題)
 - [未來規劃](#未來規劃)
+- [貢獻指南](#貢獻指南)
+- [授權條款](#授權條款)
 
 ---
 
@@ -118,6 +127,17 @@ product_images_2 (商品圖片表)
 - n8n 實例（[n8n.cloud](https://n8n.cloud) 或自架）
 - LINE Developers 帳號（[developers.line.biz](https://developers.line.biz)）
 
+### 快速開始
+
+```bash
+# 1. Clone repository
+git clone https://github.com/Backy-JP/AI-Driven_Product_Ingestion_Pipeline_with_LINE_LIFF_and_n8n.git
+cd AI-Driven_Product_Ingestion_Pipeline_with_LINE_LIFF_and_n8n
+
+# 2. 設定環境變數（參考 ENV_SETUP.md）
+# 3. 依照以下步驟部署各元件
+```
+
 ---
 
 ### 步驟 1：LINE LIFF 設定
@@ -180,7 +200,7 @@ npm install -g supabase
 supabase login
 supabase link --project-ref your-project-ref
 
-# 設定環境變數
+# 設定環境變數（詳見 ENV_SETUP.md）
 supabase secrets set N8N_WEBHOOK_URL=https://your-n8n.com/webhook/xxxxx
 supabase secrets set SUPABASE_URL=https://your-project.supabase.co
 supabase secrets set SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
@@ -189,6 +209,22 @@ supabase secrets set SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 supabase functions deploy get-signed-url
 supabase functions deploy create-product
 ```
+
+---
+
+## 🔑 環境變數設定
+
+本專案需要設定多個 API Keys 與環境變數。
+
+**📄 完整設定說明請參考：[ENV_SETUP.md](ENV_SETUP.md)**
+
+主要需要設定：
+- Supabase URL 與 Keys
+- n8n Webhook URL
+- OpenAI API Key
+- LINE LIFF ID 與 Channel Access Token
+
+⚠️ **請勿將 API Keys 提交到 Git！**
 
 ---
 
@@ -332,11 +368,46 @@ ngrok http 8000
 
 ---
 
+## 🤝 貢獻指南
+
+歡迎提交 Issue 或 Pull Request！
+
+### 如何貢獻
+
+1. Fork 本專案
+2. 建立新分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交變更 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 開啟 Pull Request
+
+### 開發規範
+
+- 遵循現有的程式碼風格
+- 提交前確保測試通過
+- 更新相關文件
+- 不要提交 API Keys 或敏感資訊
+
+---
+
+## 📄 授權條款
+
+本專案採用 MIT License 授權 - 詳見 [LICENSE](LICENSE) 文件
+
+---
+
 ## 📞 聯絡資訊
 
 若有任何問題或建議，歡迎聯繫：
-- **Email**: your-email@example.com
-- **LINE**: @your-line-id
+- **Email**: jiapei311157@gmail.com
+- **GitHub**: [@Backy-JP](https://github.com/Backy-JP)
+
+---
+
+## ⭐ 支持專案
+
+如果這個專案對你有幫助，請給個 Star ⭐️
+
+[![GitHub stars](https://img.shields.io/github/stars/Backy-JP/AI-Driven_Product_Ingestion_Pipeline_with_LINE_LIFF_and_n8n?style=social)](https://github.com/Backy-JP/AI-Driven_Product_Ingestion_Pipeline_with_LINE_LIFF_and_n8n/stargazers)
 
 ---
 
