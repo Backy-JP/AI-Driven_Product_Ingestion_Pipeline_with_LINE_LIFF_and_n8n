@@ -1,0 +1,769 @@
+{
+  "name": "LIFF_ProductCreateAPI",
+  "nodes": [
+    {
+      "parameters": {
+        "fieldToSplitOut": "images",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        768,
+        -128
+      ],
+      "id": "9520cf2c-76d9-49e2-bc55-6f05f35babc4",
+      "name": "Split Out",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "tableId": "products_2",
+        "dataToSend": "=autoMapInputData"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        256,
+        -336
+      ],
+      "id": "3d54a6aa-fdbe-4be8-8118-3b9ca850d631",
+      "name": "products_2",
+      "credentials": {
+        "supabaseApi": {
+          "id": "qXynE3SWGGQOpFH9",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "tableId": "=product_images_2",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "product_id",
+              "fieldValue": "={{ $json.product_id }}"
+            },
+            {
+              "fieldId": "image_path",
+              "fieldValue": "={{ $json.image_path }}"
+            },
+            {
+              "fieldId": "sort_order",
+              "fieldValue": "={{ $json.sort_order }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1104,
+        -128
+      ],
+      "id": "9052390e-1bae-4cff-882c-19049f5753ee",
+      "name": "product_images_2",
+      "credentials": {
+        "supabaseApi": {
+          "id": "qXynE3SWGGQOpFH9",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        672,
+        -352
+      ],
+      "id": "80f5b106-442e-4963-b5d2-65d40bd7a230",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ec02d2db-aedb-45b2-90c8-af33fb52d0fb",
+              "name": "exchange_rate_2",
+              "value": "=31.2",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        464,
+        -432
+      ],
+      "id": "1b95a924-a109-46e7-9b46-0013f4c50c62",
+      "name": "匯率"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "87434d4b-6490-4429-a895-2b6312d84c93",
+              "name": "cost_twd",
+              "value": "={{ Number($json.outlet_price) * Number($json.exchange_rate_2) }}",
+              "type": "number"
+            },
+            {
+              "id": "06a86825-56f5-4794-8c64-dd68379f61fe",
+              "name": "selling_price_twd",
+              "value": "={{ (Number($json.outlet_price) * Number($json.exchange_rate_2)) * 1.5  }}",
+              "type": "number"
+            },
+            {
+              "id": "d384d886-aeaf-42c2-aab3-fd4d27eb858e",
+              "name": "margin_twd",
+              "value": "={{    ((Number($json.outlet_price) * Number($json.exchange_rate_2)) * 1.5)   -   (Number($json.outlet_price) * Number($json.exchange_rate_2)) }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        880,
+        -352
+      ],
+      "id": "b950fb76-495d-4e85-b3cc-a505913a56be",
+      "name": "Computer Price"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "products_2",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('products_2').item.json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "cost_twd",
+              "fieldValue": "={{ $json.cost_twd }}"
+            },
+            {
+              "fieldId": "selling_price_twd",
+              "fieldValue": "={{ $json.selling_price_twd }}"
+            },
+            {
+              "fieldId": "margin_twd",
+              "fieldValue": "={{ $json.margin_twd }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1088,
+        -352
+      ],
+      "id": "96c69049-d19d-453e-9141-ad1925c71798",
+      "name": "Update products",
+      "credentials": {
+        "supabaseApi": {
+          "id": "qXynE3SWGGQOpFH9",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://hqklkjeckvzllehdgidg.supabase.co/functions/v1/get-signed-url",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhxa2xramVja3Z6bGxlaGRnaWRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5NTg3ODgsImV4cCI6MjA4NjUzNDc4OH0.jJHbzXf3kTaBNG6MzOAdB5UEO1Bc3ST02l2NLDugrjA"
+            },
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhxa2xramVja3Z6bGxlaGRnaWRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5NTg3ODgsImV4cCI6MjA4NjUzNDc4OH0.jJHbzXf3kTaBNG6MzOAdB5UEO1Bc3ST02l2NLDugrjA"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"action\": \"read\",\n  \"path\": \"{{ $json.image_path }}\",\n  \"expiresIn\": 3600\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1264,
+        -128
+      ],
+      "id": "8b0b250d-d2eb-43f0-9046-f5fd43af176b",
+      "name": "Get Signed URL"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "222d78b0-9208-44a7-8781-3391b4a5a6ba",
+              "name": "=product_id",
+              "value": "={{ $('Attach Product Id').item.json.product_id }}",
+              "type": "string"
+            },
+            {
+              "id": "75d25a72-f054-48f0-9c53-f70c2329d9c1",
+              "name": "sort_order",
+              "value": "={{$itemIndex}}",
+              "type": "string"
+            },
+            {
+              "id": "eb9ad092-e40c-4792-8f57-b414543f1f73",
+              "name": "image_path",
+              "value": "={{ $json.images }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        928,
+        -128
+      ],
+      "id": "1ba28d89-5691-4e02-a40a-eda7243011ee",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8f35ed0e-b954-4f90-a1d4-a69dbb8e44bd",
+              "name": "user_id",
+              "value": "={{ $json.body.user_id }}",
+              "type": "string"
+            },
+            {
+              "id": "ba481e44-b01b-4807-8ad1-ed01ff7429f0",
+              "name": "batch_id",
+              "value": "={{ $json.body.batch_id }}",
+              "type": "string"
+            },
+            {
+              "id": "ad25f05f-fa71-4650-b865-516992057c7e",
+              "name": "description",
+              "value": "={{ $json.body.description }}",
+              "type": "string"
+            },
+            {
+              "id": "1fdb59cb-eca1-42ff-b761-0d39b1b7572c",
+              "name": "outlet_price",
+              "value": "={{ $json.body.price }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        112,
+        -336
+      ],
+      "id": "ae77aa08-f556-4189-95f5-4110aaaf7e8c",
+      "name": "選我要的資料"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "88ac6455-5c8f-4a1e-847b-14be6a0951ee",
+              "name": "product_id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "085a861a-f3a6-42df-97d8-4d54f0c639eb",
+              "name": "images",
+              "value": "={{ $('LIFF Webhook').item.json.body.images }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        544,
+        -128
+      ],
+      "id": "483a7e16-d119-4094-8499-3d46a0979310",
+      "name": "Attach Product Id"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/responses",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_OPENAI_API_KEY_HERE"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={\n  \"model\": \"gpt-4o-mini\",\n  \"input\": [\n    {\n      \"role\": \"user\",\n      \"content\": [\n        {\n          \"type\": \"input_text\",\n          \"text\": \"分析這張圖片是否為精品吊牌，並抽取品牌、型號、原價與幣別。只輸出純JSON。\"\n        },\n        {\n          \"type\": \"input_image\",\n          \"image_url\": \"{{ $json.img_url }}\"\n        }\n      ]\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1600,
+        -128
+      ],
+      "id": "cbfb6df5-d24a-442e-a522-99ce5f940f91",
+      "name": "OpenAI Tag Classifier"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map((item) => {\n  const t =\n    item.json?.output?.[0]?.content?.find(c => c.type === \"output_text\")?.text\n    ?? item.json?.output_text;\n\n  if (!t) return { json: { ...item.json, parse_error: \"No output_text\" } };\n\n  const cleaned = t.replace(/```json/g, \"\").replace(/```/g, \"\").trim();\n\n  try {\n    return { json: { ...item.json, ...JSON.parse(cleaned) } };\n  } catch (e) {\n    return { json: { ...item.json, parse_error: \"JSON.parse failed\", rawText: t } };\n  }\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1792,
+        -128
+      ],
+      "id": "d9f632c6-be83-4d37-a309-41b3be04e4b4",
+      "name": "Parse OpenAI JSON"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0f4fbc35-de97-4b74-a891-eeb86b1d0153",
+              "name": "img_url",
+              "value": "={{ ($json.signedUrl || '').trim() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1392,
+        -128
+      ],
+      "id": "1bcb69b7-7c34-4349-807f-4343e41a8c7a",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "35f00e5f-3256-4300-843c-f0e501615770",
+              "leftValue": "={{ $json['品牌'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "fee11e63-5a79-46a0-88d0-e2d3e8aa111a",
+              "leftValue": "={{ $json.brand }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2000,
+        -128
+      ],
+      "id": "76cddc66-cf99-4db1-ba73-3fd6c07a9dcb",
+      "name": "{{$json.brand}} is not empty"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "products_2",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "brand",
+              "fieldValue": "={{ $json.brand }}"
+            },
+            {
+              "fieldId": "model",
+              "fieldValue": "={{ $json.model }}"
+            },
+            {
+              "fieldId": "original_price",
+              "fieldValue": "={{ $json.original_price }}"
+            },
+            {
+              "fieldId": "currency",
+              "fieldValue": "={{ $json.currency }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "active"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2464,
+        -144
+      ],
+      "id": "064860c3-40b5-44ea-b7cb-48de5601a5f0",
+      "name": "Update a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "qXynE3SWGGQOpFH9",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1700076b-a6e9-4224-b007-c354663d5633",
+              "name": "id",
+              "value": "={{ $('Attach Product Id').item.json.product_id }}",
+              "type": "string"
+            },
+            {
+              "id": "f3e500a5-462c-4334-8d16-216b0b2e13b5",
+              "name": "brand",
+              "value": "={{ $json['品牌'] || $json.brand }}",
+              "type": "string"
+            },
+            {
+              "id": "bea6ca2c-6e1c-424e-a467-38b2a736ab44",
+              "name": "model",
+              "value": "={{ $json['型號'] || $json.model }}",
+              "type": "string"
+            },
+            {
+              "id": "410a70e7-593f-47d7-8bab-bfe5a1e94937",
+              "name": "original_price",
+              "value": "={{ $json['原價'] || $json.original_price }}",
+              "type": "string"
+            },
+            {
+              "id": "cdaad426-c39f-47a2-8bf0-511b6c74e235",
+              "name": "=currency",
+              "value": "={{ $json['幣別'] || $json.currency }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2272,
+        -144
+      ],
+      "id": "8b0a4096-1252-428b-879e-0e6872f0d9be",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "LIFFProductCreate",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -80,
+        -336
+      ],
+      "id": "6fe2a1f5-afd8-4ff3-9c6c-d0316af1eb61",
+      "name": "LIFF Webhook",
+      "webhookId": "52af907b-5e0e-4c2b-a6d1-6d313980f51d"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "products_2": {
+      "main": [
+        [
+          {
+            "node": "匯率",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Attach Product Id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "product_images_2": {
+      "main": [
+        [
+          {
+            "node": "Get Signed URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "匯率": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Computer Price",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Computer Price": {
+      "main": [
+        [
+          {
+            "node": "Update products",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Signed URL": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "product_images_2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "選我要的資料": {
+      "main": [
+        [
+          {
+            "node": "products_2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attach Product Id": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Tag Classifier": {
+      "main": [
+        [
+          {
+            "node": "Parse OpenAI JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse OpenAI JSON": {
+      "main": [
+        [
+          {
+            "node": "{{$json.brand}} is not empty",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "OpenAI Tag Classifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "{{$json.brand}} is not empty": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Update a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LIFF Webhook": {
+      "main": [
+        [
+          {
+            "node": "選我要的資料",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a row": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "03401113-cd1d-45a3-ae71-afcc4c0a49a2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cb852bc1b5cb57985c0ea4a45c44cab69b9efea0bc84f63fe59227226f47e98b"
+  },
+  "id": "ZBTYJHy4o4o8O1rB",
+  "tags": []
+}

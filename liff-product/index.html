@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>新增商品</title>
+  <style>
+    :root { --bg:#0b0f17; --card:#121a27; --muted:#8aa0b8; --text:#eaf2ff; --accent:#5C6BC0; --danger:#EF5350; }
+    * { box-sizing: border-box; }
+    body { margin:0; background: linear-gradient(180deg, #0b0f17, #070a10); color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans TC","PingFang TC",Arial,sans-serif; }
+    .wrap { max-width: 560px; margin: 0 auto; padding: 18px 14px 28px; }
+    .title { display:flex; align-items:center; justify-content:space-between; margin: 6px 0 14px; }
+    .title h1 { font-size: 20px; margin:0; letter-spacing: .5px; }
+    .chip { font-size: 12px; color: var(--muted); background: rgba(255,255,255,.06); padding: 6px 10px; border-radius: 999px; }
+    .card { background: rgba(18,26,39,.92); border: 1px solid rgba(255,255,255,.08); border-radius: 16px;
+      padding: 14px; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
+    .field { margin: 12px 0; }
+    label { display:block; font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+    input[type="text"], input[type="number"], textarea {
+      width: 100%; padding: 12px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06); color: var(--text); outline: none;
+    }
+    textarea { min-height: 88px; resize: vertical; }
+    input::placeholder, textarea::placeholder { color: rgba(138,160,184,.75); }
+    .hint { font-size: 12px; color: rgba(138,160,184,.9); line-height: 1.4; }
+    .uploader { border: 1px dashed rgba(255,255,255,.18); border-radius: 14px; padding: 14px; background: rgba(255,255,255,.04); }
+    .uploader-top { display:flex; align-items:center; justify-content:space-between; gap: 10px; }
+    .btn { appearance:none; border:none; border-radius: 12px; padding: 12px 14px; background: var(--accent); color:white; font-weight:700; cursor:pointer; }
+    .btn:disabled { opacity:.55; cursor:not-allowed; }
+    .btn.secondary { background: rgba(255,255,255,.10); color: var(--text); font-weight: 600; }
+    .btn.danger { background: rgba(239,83,80,.18); color: #ffb7b6; }
+    .grid { display:grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+    .thumb { position: relative; overflow:hidden; border-radius: 14px; border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.25); aspect-ratio: 1/1; }
+    .thumb img { width:100%; height:100%; object-fit: cover; display:block; }
+    .thumb button { position:absolute; top:8px; right:8px; width: 28px; height: 28px; border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16); background: rgba(0,0,0,.45); color: white; cursor:pointer; }
+    .status { margin-top: 12px; padding: 10px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05); display:none; }
+    .status strong { display:block; margin-bottom: 4px; }
+    .progress { height: 8px; border-radius: 999px; background: rgba(255,255,255,.08); overflow:hidden; margin-top: 8px; }
+    .bar { height: 100%; width: 0%; background: rgba(92,107,192,.9); transition: width .2s ease; }
+    .footer { margin-top: 14px; display:flex; gap: 10px; }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="title">
+      <h1>新增商品</h1>
+      <div class="chip" id="chip">初始化中…</div>
+    </div>
+
+    <div class="card">
+      <div class="field uploader">
+        <div class="uploader-top">
+          <div>
+            <label>商品照片（可多張）</label>
+            <div class="hint">建議包含：外觀照 + 吊牌照（吊牌會交給 AI 解析）</div>
+          </div>
+          <button class="btn secondary" id="pickBtn" type="button">選擇照片</button>
+        </div>
+
+        <input type="file" id="images" multiple accept="image/*" style="display:none;" />
+        <div class="grid" id="previewGrid"></div>
+      </div>
+
+      <div class="field">
+        <label>描述（可選）</label>
+        <textarea id="description" placeholder="例如：可放進長夾"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Outlet 價格（必填）</label>
+        <input type="number" id="price" placeholder="例如：99" inputmode="numeric" />
+      </div>
+
+      <div class="status" id="statusBox">
+        <strong id="statusTitle">狀態</strong>
+        <div class="hint" id="statusText">待命</div>
+        <div class="progress"><div class="bar" id="bar"></div></div>
+      </div>
+
+      <div class="footer">
+        <button class="btn" id="submitBtn" type="button">送出</button>
+        <button class="btn danger" id="closeBtn" type="button">關閉</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIFF SDK -->
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+  <script>
+    // ====== 你要換成真的 key ======
+    const SUPABASE_URL = "https://hqklkjeckvzllehdgidg.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhxa2xramVja3Z6bGxlaGRnaWRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5NTg3ODgsImV4cCI6MjA4NjUzNDc4OH0.jJHbzXf3kTaBNG6MzOAdB5UEO1Bc3ST02l2NLDugrjA";
+
+    // ===== Utilities =====
+    function sanitizeFileName(name) {
+      return name.replace(/[^a-zA-Z0-9.\-_]/g, "_");
+    }
+    function newBatchId() {
+      if (crypto?.randomUUID) return crypto.randomUUID();
+      return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    }
+    function setStatus(show, title = "", text = "", pct = 0) {
+      const box = document.getElementById("statusBox");
+      box.style.display = show ? "block" : "none";
+      if (show) {
+        document.getElementById("statusTitle").textContent = title;
+        document.getElementById("statusText").textContent = text;
+        document.getElementById("bar").style.width = `${Math.max(0, Math.min(100, pct))}%`;
+      }
+    }
+
+    // ===== State =====
+    let line_user_id = null;
+    let selectedFiles = [];
+    let previewUrls = [];
+
+    // ===== UI refs =====
+    const pickBtn = document.getElementById("pickBtn");
+    const imagesInput = document.getElementById("images");
+    const previewGrid = document.getElementById("previewGrid");
+    const submitBtn = document.getElementById("submitBtn");
+    const closeBtn = document.getElementById("closeBtn");
+    const chip = document.getElementById("chip");
+
+    // ===== Preview handling =====
+    function renderPreview() {
+      previewGrid.innerHTML = "";
+      previewUrls.forEach(u => URL.revokeObjectURL(u));
+      previewUrls = [];
+
+      selectedFiles.forEach((file, idx) => {
+        const url = URL.createObjectURL(file);
+        previewUrls.push(url);
+
+        const div = document.createElement("div");
+        div.className = "thumb";
+
+        const img = document.createElement("img");
+        img.src = url;
+
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.title = "移除";
+        btn.textContent = "✕";
+        btn.addEventListener("click", () => {
+          selectedFiles.splice(idx, 1);
+          renderPreview();
+        });
+
+        div.appendChild(img);
+        div.appendChild(btn);
+        previewGrid.appendChild(div);
+      });
+    }
+
+    pickBtn.addEventListener("click", () => imagesInput.click());
+    imagesInput.addEventListener("change", () => {
+      const files = Array.from(imagesInput.files || []);
+      selectedFiles = selectedFiles.concat(files); // 合併選取
+      imagesInput.value = "";
+      renderPreview();
+    });
+
+    closeBtn.addEventListener("click", () => {
+      if (window.liff && liff.isInClient()) liff.closeWindow();
+      else window.close();
+    });
+
+    // ===== LIFF init =====
+    async function initLIFF() {
+      try {
+        await liff.init({ liffId: "2009156161-ENFwbfp9" });
+
+        if (!liff.isLoggedIn()) {
+          chip.textContent = "未登入（請從 LINE 開啟）";
+          // 不強制 login，避免你又陷入 redirect 迴圈
+          return;
+        }
+
+        const profile = await liff.getProfile();
+        line_user_id = profile.userId;
+
+        chip.textContent = `已登入：${line_user_id.slice(0, 6)}…`;
+        console.log("LIFF init success");
+        console.log("UserId:", line_user_id);
+
+      } catch (err) {
+        console.error("LIFF init error:", err);
+        chip.textContent = "LIFF 初始化失敗";
+      }
+    }
+
+    // ===== Submit =====
+    async function submitProduct() {
+      try {
+        if (!line_user_id) {
+          alert("尚未登入 LIFF，請從 LINE 內開啟此頁面");
+          return;
+        }
+
+        const description = document.getElementById("description").value?.trim() || "";
+        const priceRaw = document.getElementById("price").value;
+
+        if (selectedFiles.length === 0) {
+          alert("請選擇至少 1 張照片");
+          return;
+        }
+        if (!priceRaw || isNaN(Number(priceRaw)) || Number(priceRaw) <= 0) {
+          alert("請輸入正確的 Outlet 價格（數字）");
+          return;
+        }
+        if (!SUPABASE_ANON_KEY || SUPABASE_ANON_KEY.includes("請換成")) {
+          alert("你還沒把 SUPABASE_ANON_KEY 換成真的");
+          return;
+        }
+
+        submitBtn.disabled = true;
+        pickBtn.disabled = true;
+
+        const batchId = newBatchId();
+        const imagePaths = [];
+
+        setStatus(true, "上傳中…", `準備上傳 ${selectedFiles.length} 張`, 5);
+
+        let done = 0;
+        for (const file of selectedFiles) {
+          const safeName = sanitizeFileName(file.name);
+          const path = `products/${line_user_id}/${batchId}/${Date.now()}-${safeName}`;
+
+          // 1) 取得 signed URL
+          const res = await fetch(`${SUPABASE_URL}/functions/v1/get-signed-url`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "apikey": SUPABASE_ANON_KEY,
+              "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+            },
+            body: JSON.stringify({ path })
+          });
+
+          const data = await res.json().catch(() => ({}));
+
+          if (!res.ok) {
+            console.error("Signed URL error:", data);
+            throw new Error(data?.error || "取得上傳連結失敗");
+          }
+          if (!data?.signedUrl || !data?.filePath) {
+            console.error("Signed URL response missing:", data);
+            throw new Error("signedUrl/filePath 不存在（請檢查 get-signed-url 回傳）");
+          }
+
+          // 2) 上傳
+          const uploadRes = await fetch(data.signedUrl, {
+            method: "PUT",
+            headers: {
+              "Content-Type": file.type || "application/octet-stream",
+              "x-upsert": "true"
+            },
+            body: file
+          });
+
+          if (!uploadRes.ok) {
+            const errText = await uploadRes.text();
+            console.error("Upload failed:", uploadRes.status, errText);
+            throw new Error("圖片上傳失敗：" + errText);
+          }
+
+          imagePaths.push(data.filePath);
+
+          done += 1;
+          const pct = Math.round((done / selectedFiles.length) * 60) + 10;
+          setStatus(true, "上傳中…", `已上傳 ${done}/${selectedFiles.length}`, pct);
+        }
+
+        // 3) 呼叫 create-product（轉發 n8n）
+        setStatus(true, "建立商品…", "正在呼叫後端建立商品與 AI 解析", 85);
+
+        const payload = {
+          line_user_id,
+          batch_id: batchId,
+          description,
+          price: Number(priceRaw),
+          images: imagePaths
+        };
+
+        console.log("create-product payload:", payload);
+
+        const createRes = await fetch(`${SUPABASE_URL}/functions/v1/create-product`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": SUPABASE_ANON_KEY,
+            "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const createData = await createRes.json().catch(() => ({}));
+        if (!createRes.ok) {
+          console.error("create-product failed:", createRes.status, createData);
+          throw new Error(createData?.error || "建立商品失敗");
+        }
+
+        setStatus(true, "完成 ✅", "商品已建立，商品卡片將推送到聊天室", 100);
+
+        setTimeout(() => {
+          alert("商品建立成功 ✅");
+          if (liff.isInClient()) liff.closeWindow();
+        }, 400);
+
+      } catch (err) {
+        console.error(err);
+        alert("錯誤：" + (err?.message || err));
+        setStatus(false);
+      } finally {
+        submitBtn.disabled = false;
+        pickBtn.disabled = false;
+      }
+    }
+
+    submitBtn.addEventListener("click", submitProduct);
+
+    // ✅ 等 DOM ready 再 init（避免 sdk appendChild null）
+    document.addEventListener("DOMContentLoaded", initLIFF);
+  </script>
+</body>
+</html>
