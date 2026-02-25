@@ -53,19 +53,30 @@
 
 ## 📱 系統展示
 
-### LINE 聊天室入口
+### 操作介面展示
 
-點擊圖文選單即可開啟 LIFF 介面，操作非常友善。
+<table>
+<tr>
+<td width="50%">
 
-![LINE 聊天室入口](screenshots/line-menu.png)
+#### LINE 聊天室入口
 
----
+點擊圖文選單即可開啟 LIFF 介面
 
-### LIFF 上傳介面
+<img src="screenshots/line-menu.png" width="100%" alt="LINE 聊天室入口">
 
-直接在 LINE 內開啟，支援多圖上傳、即時預覽。
+</td>
+<td width="50%">
 
-![LIFF 上傳介面](screenshots/liff-upload.png)
+#### LIFF 上傳介面（範例）
+
+直接在 LINE 內開啟，支援多圖上傳
+
+<img src="screenshots/liff-upload.png" width="100%" alt="LIFF 上傳介面">
+
+</td>
+</tr>
+</table>
 
 ---
 
@@ -73,7 +84,9 @@
 
 從接收 webhook、AI 辨識、資料庫寫入到 LINE 推送，全自動處理。
 
-![n8n 工作流程](screenshots/n8n-workflow.png)
+<img src="screenshots/n8n-workflow.png" width="100%" alt="n8n 工作流程">
+
+*完整的自動化流程：Webhook → AI 辨識 → 匯率轉換 → 資料庫 → LINE 推送*
 
 ---
 
@@ -400,14 +413,6 @@ ngrok http 8000
 若有任何問題或建議，歡迎聯繫：
 - **Email**: jiapei311157@gmail.com
 - **GitHub**: [@Backy-JP](https://github.com/Backy-JP)
-
----
-
-## ⭐ 支持專案
-
-如果這個專案對你有幫助，請給個 Star ⭐️
-
-[![GitHub stars](https://img.shields.io/github/stars/Backy-JP/AI-Driven_Product_Ingestion_Pipeline_with_LINE_LIFF_and_n8n?style=social)](https://github.com/Backy-JP/AI-Driven_Product_Ingestion_Pipeline_with_LINE_LIFF_and_n8n/stargazers)
 
 ---
 
