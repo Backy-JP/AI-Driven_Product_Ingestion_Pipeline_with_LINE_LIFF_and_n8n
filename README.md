@@ -61,9 +61,9 @@
 
 #### LINE 聊天室入口
 
-點擊圖文選單即可開啟 LIFF 介面
+點擊圖文選單中的"上傳商品"即可開啟 LIFF 介面
 
-<img src="screenshots/line-menu.png" width="100%" alt="LINE 聊天室入口">
+<img src="screenshots/line-menu.png" width="70%" alt="LINE 聊天室入口">
 
 </td>
 <td width="50%">
@@ -72,7 +72,7 @@
 
 直接在 LINE 內開啟，支援多圖上傳
 
-<img src="screenshots/liff-upload.png" width="100%" alt="LIFF 上傳介面">
+<img src="screenshots/liff-upload.png" width="70%" alt="LIFF 上傳介面">
 
 </td>
 </tr>
