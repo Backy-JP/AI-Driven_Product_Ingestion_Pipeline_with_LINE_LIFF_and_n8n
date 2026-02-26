@@ -63,7 +63,7 @@
 ### 🔥 核心特色
 
 - **⚡ 極速建檔**：現場拍照上傳，無需後續整理
-- **🤖 AI 辨識**：自動提取吊牌上的品牌、型號、原價
+- **🤖 AI 智能辨識**：自動提取吊牌上的品牌、型號、原價
 - **📲 友善介面**：LINE 內建整合，操作直覺無學習成本
 - **💰 匯率整合**：自動換算貨幣與台幣報價（規劃中）
 - **📊 完整記錄**：所有商品自動建檔，方便庫存管理
@@ -400,36 +400,16 @@ ngrok http 8000
 
 ---
 
-## 🤝 貢獻指南
-
-歡迎提交 Issue 或 Pull Request！
-
-### 如何貢獻
-
-1. Fork 本專案
-2. 建立新分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交變更 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 開啟 Pull Request
-
-### 開發規範
-
-- 遵循現有的程式碼風格
-- 提交前確保測試通過
-- 更新相關文件
-- 不要提交 API Keys 或敏感資訊
-
----
-
 ## 📄 授權條款
 
 本專案採用 MIT License 授權 - 詳見 [LICENSE](LICENSE) 文件
 
 ---
 
-## 📞 聯絡資訊
+## 👨‍💻 作者
 
-若有任何問題或建議，歡迎聯繫：
+**Pei (Backy-JP)**
+
 - **Email**: jiapei311157@gmail.com
 - **GitHub**: [@Backy-JP](https://github.com/Backy-JP)
 
@@ -437,3 +417,4 @@ ngrok http 8000
 
 **Built with ❤️ using LINE LIFF + n8n + Supabase**  
 **Designed for 代購者 | Built for Efficiency | Powered by AI**
+
