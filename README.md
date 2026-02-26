@@ -1,10 +1,29 @@
 # AI-Driven Product Ingestion Pipeline
 
+<div align="center">
+
+## 🚀 LINE x AI 全自動代購革命
+
+**📸 拍照 → 🤖 AI 辨識 → 🛒 購物車 → 📄 PDF 訂單**
+
+### 商品上架模組：拍照即建檔，AI 秒速辨識
+
+</div>
+
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/Backy-JP/AI-Driven_Product_Ingestion_Pipeline_with_LINE_LIFF_and_n8n)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?logo=supabase&logoColor=white)](https://supabase.com)
 [![n8n](https://img.shields.io/badge/n8n-EA4B71?logo=n8n&logoColor=white)](https://n8n.io)
 [![LINE](https://img.shields.io/badge/LINE-00C300?logo=line&logoColor=white)](https://line.me)
+
+> 💡 **完整解決方案 - 三大專案打造極致代購體驗**  
+> 本專案是 **LINE x AI 自動化代購生態系統** 的商品上架模組，需配合以下專案完整運作：
+> 
+> 1. **[AI-Driven Product Ingestion Pipeline](https://github.com/Backy-JP/AI-Driven_Product_Ingestion_Pipeline_with_LINE_LIFF_and_n8n)** - 📸 本專案：拍照上傳 + 🤖 AI 商品辨識與資料自動化建檔
+> 2. **[LINE LIFF Ecommerce Cart](https://github.com/Backy-JP/LINE_LIFF_Ecommerce_Cart)** - 🛒 LINE 購物車與訂單系統
+> 3. **[LINE PDF Generator](https://github.com/Backy-JP/LINE_PDF_Generator)** - 📄 一鍵生成購物清單 PDF
+> 
+> **從商品拍攝到訂單下載，全程 LINE 完成，無需跳轉外部平台！**
 
 > 🎯 **專為代購者設計的高效 AI 商品管理系統**  
 > 基於 **LINE LIFF** + **n8n** + **Supabase**  
