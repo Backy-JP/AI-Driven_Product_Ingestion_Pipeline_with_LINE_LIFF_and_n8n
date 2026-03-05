@@ -2,7 +2,7 @@
 
 <div align="center">
 
-## 🚀 LINE x AI 全自動代購革命
+## LINE x AI 全自動代購革命
 
 **📸 拍照 → 🤖 AI 辨識 → 🛒 購物車 → 📄 PDF 訂單**
 
@@ -16,41 +16,26 @@
 [![n8n](https://img.shields.io/badge/n8n-EA4B71?logo=n8n&logoColor=white)](https://n8n.io)
 [![LINE](https://img.shields.io/badge/LINE-00C300?logo=line&logoColor=white)](https://line.me)
 
-> 💡 **完整解決方案 - 三大專案打造極致代購體驗**  
+> **完整解決方案 - 三大專案打造極致代購體驗**  
 > 本專案是 **LINE x AI 自動化代購生態系統** 的商品上架模組，需配合以下專案完整運作：
 > 
-> 1. **[AI-Driven Product Ingestion Pipeline](https://github.com/Backy-JP/AI-Driven_Product_Ingestion_Pipeline_with_LINE_LIFF_and_n8n)** - 📸 本專案：拍照上傳 + 🤖 AI 商品辨識與資料自動化建檔
-> 2. **[LINE LIFF Ecommerce Cart](https://github.com/Backy-JP/LINE_LIFF_Ecommerce_Cart)** - 🛒 LINE 購物車與訂單系統
-> 3. **[LINE PDF Generator](https://github.com/Backy-JP/LINE_PDF_Generator)** - 📄 一鍵生成購物清單 PDF
+> 1. **[AI-Driven Product Ingestion Pipeline](https://github.com/Backy-JP/AI-Driven_Product_Ingestion_Pipeline_with_LINE_LIFF_and_n8n)** - 本專案：拍照上傳 + AI 商品辨識與資料自動化建檔
+> 2. **[LINE LIFF Ecommerce Cart](https://github.com/Backy-JP/LINE_LIFF_Ecommerce_Cart)** - LINE 購物車與訂單系統
+> 3. **[LINE PDF Generator](https://github.com/Backy-JP/LINE_PDF_Generator)** - 一鍵生成購物清單 PDF
 > 
 > **從商品拍攝到訂單下載，全程 LINE 完成，無需跳轉外部平台！**
 
-> 🎯 **專為代購者設計的高效 AI 商品管理系統**  
+> **專為代購者設計的高效 AI 商品管理系統**  
 > 基於 **LINE LIFF** + **n8n** + **Supabase**  
 > **拍照即上傳，AI 自動辨識吊牌，秒級建檔推送商品卡片**
 
 ---
 
-## 📋 目錄
-
-- [專案簡介](#專案簡介)
-- [系統展示](#系統展示)
-- [技術架構](#技術架構)
-- [安裝與部署](#安裝與部署)
-- [環境變數設定](#環境變數設定)
-- [使用說明](#使用說明)
-- [常見問題](#常見問題)
-- [未來規劃](#未來規劃)
-- [貢獻指南](#貢獻指南)
-- [授權條款](#授權條款)
-
----
-
-## 🚀 專案簡介
+## 專案簡介
 
 ### 為代購者量身打造的極速建檔系統
 
-> **📸 拍照 → 🤖 AI 辨識 → 💬 推送商品卡片**  
+> **拍照 → AI 辨識 → 推送商品卡片**  
 > **只需當下拍攝商品照片與吊牌，系統自動完成所有建檔工作**
 
 **本系統讓建檔在 30 秒內完成：**
@@ -60,17 +45,17 @@
 4. ✅ AI 自動辨識吊牌資訊（品牌、原價、型號）
 5. ✅ 自動建檔並推送商品卡片（規劃中）
 
-### 🔥 核心特色
+### 核心特色
 
-- **⚡ 極速建檔**：現場拍照上傳，無需後續整理
-- **🤖 AI 智能辨識**：自動提取吊牌上的品牌、型號、原價
-- **📲 友善介面**：LINE 內建整合，操作直覺無學習成本
-- **💰 匯率整合**：自動換算貨幣與台幣報價（規劃中）
-- **📊 完整記錄**：所有商品自動建檔，方便庫存管理
+- **極速建檔**：現場拍照上傳，無需後續整理
+- **AI 智能辨識**：自動提取吊牌上的品牌、型號、原價
+- **友善介面**：LINE 內建整合，操作直覺無學習成本
+- **匯率整合**：自動換算貨幣與台幣報價（規劃中）
+- **完整記錄**：所有商品自動建檔，方便庫存管理
 
 ---
 
-## 📱 系統展示
+## 系統展示
 
 ### 操作介面展示
 
@@ -109,7 +94,7 @@
 
 ---
 
-## 🏗️ 技術架構
+## 技術架構
 
 ```
 LINE LIFF (前端)
@@ -150,7 +135,7 @@ product_images_2 (商品圖片表)
 
 ---
 
-## 📦 安裝與部署
+## 安裝與部署
 
 ### 前置需求
 
@@ -244,11 +229,11 @@ supabase functions deploy create-product
 
 ---
 
-## 🔑 環境變數設定
+## 環境變數設定
 
 本專案需要設定多個 API Keys 與環境變數。
 
-**📄 完整設定說明請參考：[ENV_SETUP.md](ENV_SETUP.md)**
+**完整設定說明請參考：[ENV_SETUP.md](ENV_SETUP.md)**
 
 主要需要設定：
 - Supabase URL 與 Keys
@@ -295,7 +280,7 @@ await liff.init({ liffId: "your-liff-id" });
 
 ---
 
-## 🎯 使用說明
+## 使用說明
 
 ### 代購者操作流程（30 秒完成）
 
@@ -306,11 +291,11 @@ await liff.init({ liffId: "your-liff-id" });
 5. **AI 辨識**：自動辨識品牌、原價、型號並建檔
 6. **接收卡片**（規劃中）：商品卡片推送至聊天室
 
-> 💡 **效率提升**：傳統需要 30 分鐘整理，現在 30 秒完成！
+> **效率提升**：傳統需要 30 分鐘整理，現在 30 秒完成！
 
 ---
 
-## 🔧 常見問題
+## 常見問題
 
 <details>
 <summary><strong>Q1: LIFF 顯示「未登入」？</strong></summary>
@@ -355,7 +340,7 @@ supabase functions deploy get-signed-url
 
 ---
 
-## 🛠️ 開發指南
+## 開發指南
 
 ### 本地開發
 
@@ -380,14 +365,14 @@ ngrok http 8000
 
 ---
 
-## 📈 未來規劃
+## 未來規劃
 
 ### 核心功能
 
-- **💱 匯率 API 整合**：串接即時匯率，自動換算台幣
-- **📲 Flex Message 推送**：自動推送精美商品卡片至聊天室
-- **🖼️ 輪播圖片**：商品卡片支援多圖左右滑動
-- **🛒 訂單管理**：買家下單、狀態追蹤、自動通知
+- **匯率 API 整合**：串接即時匯率，自動換算台幣
+- **Flex Message 推送**：自動推送精美商品卡片至聊天室
+- **輪播圖片**：商品卡片支援多圖左右滑動
+- **訂單管理**：買家下單、狀態追蹤、自動通知
 
 ### 進階功能
 
@@ -400,13 +385,13 @@ ngrok http 8000
 
 ---
 
-## 📄 授權條款
+## 授權條款
 
 本專案採用 MIT License 授權 - 詳見 [LICENSE](LICENSE) 文件
 
 ---
 
-## 👨‍💻 作者
+## 作者
 
 **Pei (Backy-JP)**
 
